@@ -20,7 +20,7 @@ type Rocket struct {
 type Store interface {
 	GetRocketByID(id string) (Rocket, error)
 	InsertRocket(rkt Rocket) (Rocket, error)
-	DeleteRocket(id string) (Rocket, error)
+	DeleteRocket(id string) ( error)
 }
 
 // service responsible for updating the rocket inventory
@@ -55,7 +55,7 @@ func (s Service) InsertRocket(ctx context.Context, rkt Rocket) (Rocket, error) {
 }
 
 func (s Service) DeleteRocket(ctx context.Context, id string) error {
-	_, err := s.Store.DeleteRocket(id)
+	err := s.Store.DeleteRocket(id)
 	if err != nil {
 		return err
 	}

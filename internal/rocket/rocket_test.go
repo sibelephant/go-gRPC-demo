@@ -50,9 +50,7 @@ func TestRocketService(t *testing.T) {
 	t.Run("tests delete rocket", func(t *testing.T) {
 		rocketStoreMock := NewMockStore(mockCtrl)
 		id := "UUID-1"
-		rocketStoreMock.EXPECT().DeleteRocket(id).Return(Rocket{
-			ID: id,
-		}, nil)
+		rocketStoreMock.EXPECT().DeleteRocket(id).Return(nil)
 
 		rocketService := New(rocketStoreMock)
 

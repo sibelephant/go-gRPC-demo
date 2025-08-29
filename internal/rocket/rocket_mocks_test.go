@@ -34,12 +34,11 @@ func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 }
 
 // DeleteRocket mocks base method.
-func (m *MockStore) DeleteRocket(arg0 string) (Rocket, error) {
+func (m *MockStore) DeleteRocket(arg0 string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteRocket", arg0)
-	ret0, _ := ret[0].(Rocket)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // DeleteRocket indicates an expected call of DeleteRocket.
