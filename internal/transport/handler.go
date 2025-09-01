@@ -49,15 +49,16 @@ func (h Handler) Serve() error {
 
 // GetRocket handles GetRocket gRPC requests
 func (h Handler) GetRocket(ctx context.Context, r *rkt.GetRocketRequest) (*rkt.GetRocketResponse, error) {
-	rocket, err := h.RocketService.GetRocketByID(ctx, r.Id)
+	log.Print("getRocket grpc endpoint was hit!!")
+	_, err := h.RocketService.GetRocketByID(ctx, r.Id)
 	if err != nil {
 		return &rkt.GetRocketResponse{}, err
 	}
 
 	protoRocket := &rkt.Rocket{
-		Id:   rocket.ID,
-		Name: rocket.Name,
-		Type: rocket.Type,
+		Id:   "test-id",
+		Name: "khalid",
+		Type: "khalid-type",
 	}
 
 	return &rkt.GetRocketResponse{
