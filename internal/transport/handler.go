@@ -50,15 +50,15 @@ func (h Handler) Serve() error {
 // GetRocket handles GetRocket gRPC requests
 func (h Handler) GetRocket(ctx context.Context, r *rkt.GetRocketRequest) (*rkt.GetRocketResponse, error) {
 	log.Print("getRocket grpc endpoint was hit!!")
-	_, err := h.RocketService.GetRocketByID(ctx, r.Id)
+	rocket, err := h.RocketService.GetRocketByID(ctx, r.Id)
 	if err != nil {
 		return &rkt.GetRocketResponse{}, err
 	}
 
 	protoRocket := &rkt.Rocket{
-		Id:   "test-id",
-		Name: "khalid",
-		Type: "khalid-type",
+		Id:   rocket.ID,
+		Name: rocket.Name,
+		Type: rocket.Type,
 	}
 
 	return &rkt.GetRocketResponse{
@@ -68,19 +68,23 @@ func (h Handler) GetRocket(ctx context.Context, r *rkt.GetRocketRequest) (*rkt.G
 
 // AddRocket handles AddRocket gRPC requests
 func (h Handler) AddRocket(ctx context.Context, r *rkt.AddRocketRequest) (*rkt.AddRocketResponse, error) {
+	log.Print("Add rocket handler was hit!!")
 	newRocket := rocket.Rocket{
-		ID:   r.Rocket.Id,
+		// Don't set ID - let database auto-generate it
 		Name: r.Rocket.Name,
 		Type: r.Rocket.Type,
+		// Note: Flight field is not in your proto yet, so defaulting to 0
+		Flight: 0,
 	}
 
 	rocket, err := h.RocketService.InsertRocket(ctx, newRocket)
 	if err != nil {
+		log.Print("failed to insert rocket into database")
 		return &rkt.AddRocketResponse{}, err
 	}
 
 	protoRocket := &rkt.Rocket{
-		Id:   rocket.ID,
+		Id:   rocket.ID, // This will now be the database-generated ID
 		Name: rocket.Name,
 		Type: rocket.Type,
 	}

@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -36,14 +37,37 @@ func New() (Store, error) {
 	}, nil
 }
 
+// GetRocketById retrives a rocket by id
 func (s Store) GetRocketByID(id string) (rocket.Rocket, error) {
-	return rocket.Rocket{}, nil
+	var rkt rocket.Rocket
+	err := s.db.QueryRow(
+		`SELECT id, name, type, flight FROM rockets WHERE id=$1`,
+		id,
+	).Scan(&rkt.ID, &rkt.Name, &rkt.Type, &rkt.Flight)
+
+	if err != nil {
+		return rocket.Rocket{}, err
+	}
+	return rkt, nil
 }
 
+// this inserts a rocket into a rocket table
 func (s Store) InsertRocket(rkt rocket.Rocket) (rocket.Rocket, error) {
-	return rocket.Rocket{}, nil
+	var insertedRocket rocket.Rocket
+	err := s.db.QueryRow(
+		`INSERT INTO rockets (name, type, flight) 
+		 VALUES($1, $2, $3) 
+		 RETURNING id, name, type, flight`,
+		rkt.Name, rkt.Type, rkt.Flight,
+	).Scan(&insertedRocket.ID, &insertedRocket.Name, &insertedRocket.Type, &insertedRocket.Flight)
+
+	if err != nil {
+		return rocket.Rocket{}, errors.New("failed to insert into database")
+	}
+
+	return insertedRocket, nil
 }
 
-func (s Store) DeleteRocket(id string) ( error) {
-	return  nil
+func (s Store) DeleteRocket(id string) error {
+	return nil
 }
