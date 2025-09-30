@@ -14,7 +14,7 @@ func Run() error {
 	var rocketStore db.Store
 	var err error
 
-	// Retry database connection up to 30 times (30 seconds)
+	// Retry database connection up to 30 times(30 seconds)
 	for i := 0; i < 30; i++ {
 		rocketStore, err = db.New()
 		if err == nil {
