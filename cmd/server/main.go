@@ -31,12 +31,6 @@ func Run() error {
 
 	log.Println("Successfully connected to database")
 
-	// Temporarily disable migrations - table already exists
-	// err = rocketStore.Migrate()
-	// if err != nil {
-	// 	log.Println("failed to run migrations")
-	// 	return err
-	// }
 
 	rktService := rocket.New(rocketStore)
 
